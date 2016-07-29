@@ -260,6 +260,13 @@ output$scores <- renderTable({     if (is.null(input$file)) { return(NULL) }
   unclass((fit())$scores)
                                    }
 })  
+
+output$downloadData <- downloadHandler(
+  filename = function() { "Big_five_Survey_data.csv" },
+  content = function(file) {
+    write.csv(read.csv("data/Big_five_Survey_data.csv"), file, row.names=F, col.names=F)
+  }
+)
   
 })
 
