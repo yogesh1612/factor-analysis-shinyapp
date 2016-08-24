@@ -17,11 +17,11 @@ shinyUI(fluidPage(
     
     htmlOutput("fselect"),
     
-    sliderInput("cutoff", "Cutoff for factor loadings(for Plotting only)", min = 0,  max = 1, value = 0.25),
+    sliderInput("cutoff", "Cut-off for factor loadings(for Plotting only)", min = 0,  max = 1, value = 0.25),
     htmlOutput("xaxis"),
     htmlOutput("yaxis"),
     
-    sliderInput("cutoffcorr", "Cutoff for Correlation in Factors vs Variable", min = 0,  max = 1, value = 0.25),
+    sliderInput("cutoffcorr", "Cut-off for Correlation in Factors vs Variable", min = 0,  max = 1, value = 0.25),
     br()
      # submitButton(text = "Apply Changes", icon("refresh"))
   ),
