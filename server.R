@@ -5,11 +5,11 @@
 library("shiny")
 library("nFactors")
 library("qgraph")
-
+library("corrplot")
 
 shinyServer(function(input, output) {
 
-Dataset <- reactive({
+  Dataset <- reactive({
     if (is.null(input$file)) { return(NULL) }
     else{
     Dataset <- as.data.frame(read.csv(input$file$datapath ,header=TRUE, sep = ","))
@@ -20,10 +20,20 @@ Dataset <- reactive({
     }
   })
 
-output$table22 <- renderTable ({ 
-  round(cor(Dataset()),2) 
-                                      })
+# output$table22 <- renderTable ({ 
+#   round(cor(Dataset()),2) 
+#                                       })
+output$corplot = renderPlot({
   
+  my_data = Dataset()
+  cor.mat <- round(cor(my_data),2)
+  corrplot(cor.mat, 
+           type = "upper",    # upper triangular form
+           order = "hclust",  # ordered by hclust groups
+           tl.col = "black",  # text label color
+           tl.srt = 45)  
+
+})    
 output$table <- renderTable({ Dataset()   })
   
 nS = reactive ({    
@@ -241,16 +251,20 @@ output$mat <- renderPrint({
   
   })
 
-uni = reactive({ 
-a = matrix(fit()$uniqueness,1,)
-colnames(a) = rownames(as.matrix(fit()$uniqueness))
-rownames(a) = "Uniqueness"
-return(a)
- })
+# uni = reactive({ 
+# a = matrix(fit()$uniqueness,1,)
+# colnames(a) = rownames(as.matrix(fit()$uniqueness))
+# rownames(a) = "Uniqueness"
+# return(a)
+#  })
 
 output$uni <- renderTable({ 
   if (is.null(input$file)) { return(NULL) }
-  else{ uni() }
+  else{ 
+    # n = ceiling(length(uni())/3)
+    # matrix(uni(), ncol = 1)
+    data.frame(Variable = rownames(as.matrix(fit()$uniqueness)), Uniqueness = fit()$uniqueness)
+            }
 })
 
 

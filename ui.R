@@ -57,13 +57,13 @@ img(src = "example1.png") #, height = 280, width = 400
 ),
     
                 tabPanel("Summary",
-                         (h6(p("Correlation"))),
-                         (tableOutput("table22")),
-                         (h6(p("Test Summary"))),(textOutput("text1")),(textOutput("text2")),(textOutput("text3")),
-                         (h6(p("Factors Loadings Summary"))),
+                         (h4(p("Correlation"))),
+                         (plotOutput("corplot",height = 850, width = 850)),
+                         (h4(p("Test Summary"))),(textOutput("text1")),(textOutput("text2")),(textOutput("text3")),
+                         (h4(p("Factors Loadings Summary"))),
                           (verbatimTextOutput("mat")),
                          
-                         (h6(p("Uniqueness"))),
+                         (h4(p("Uniqueness table - "))),
                          (tableOutput("uni")),
 #                          (textOutput("text4")),
                          plotOutput("plot1",height = 600, width = 850)),
