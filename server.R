@@ -217,7 +217,8 @@ output$plot3 = renderPlot({
   if (is.null(input$file)) { return(NULL) }
   else{
     
-plot(x=(fit())$scores[,(f1())], y=(fit())$scores[,(f2())], type="p", pch=19, col="red")
+plot(x=(fit())$scores[,(f1())], y=(fit())$scores[,(f2())], type="p", pch=19, col="red",
+    xlab = paste0(input$xaxis), ylab = paste0(input$yaxis))   # added this line in edit
 
 text(x=(fit())$scores[,(f1())],y=(fit())$scores[,(f2())],labels=rownames(Dataset()), pos = 2, col="blue", cex=0.8)
 
@@ -228,7 +229,7 @@ abline(h=0); abline(v=0)
 output$loadings <- renderTable({ 
   if (is.null(input$file)) { return(NULL) }
   else{
-    
+  rownames((fit())$loadings) = colnames(Dataset())  # edit 2
   unclass((fit())$loadings)
   }
   })
@@ -270,7 +271,7 @@ output$uni <- renderTable({
 
 output$scores <- renderTable({     if (is.null(input$file)) { return(NULL) }
                                    else{
-                                     
+  rownames((fit())$scores) = rownames(Dataset()) # edit 3 i made.                                   
   unclass((fit())$scores)
                                    }
 })  
