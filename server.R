@@ -229,8 +229,9 @@ abline(h=0); abline(v=0)
 output$loadings <- renderTable({ 
   if (is.null(input$file)) { return(NULL) }
   else{
-  rownames((fit())$loadings) = colnames(Dataset())  # edit 2
-  unclass((fit())$loadings)
+  # rownames((fit())$loadings) = colnames(Dataset())  # edit 2
+  b1 = (fit())$loadings;   rownames(b1) = colnames(Dataset())  # edit 2  
+  unclass(b1) # unclass((fit())$loadings)
   }
   })
 
@@ -271,8 +272,9 @@ output$uni <- renderTable({
 
 output$scores <- renderTable({     if (is.null(input$file)) { return(NULL) }
                                    else{
-  rownames((fit())$scores) = rownames(Dataset()) # edit 3 i made.                                   
-  unclass((fit())$scores)
+  # rownames((fit())$scores) = rownames(Dataset()) # edit 3 i made.
+  b0 = (fit())$scores;   rownames(b0) = rownames(Dataset())                                   
+  unclass(b0) # unclass((fit())$scores)
                                    }
 })  
 
