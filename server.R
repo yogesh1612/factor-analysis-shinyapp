@@ -229,7 +229,7 @@ abline(h=0); abline(v=0)
 output$loadings <- renderTable({ 
   if (is.null(input$file)) { return(NULL) } else{
   # rownames((fit())$loadings) = colnames(Dataset())  # edit 2
-  b1 <- data.frame(colnames(Dataset()), (fit())$loadings);   # rownames(b1) <- colnames(Dataset())  # edit 2  
+  b1 <- data.frame(colnames(Dataset())[2:ncol(Dataset())], (fit())$loadings);   # rownames(b1) <- colnames(Dataset())  # edit 2  
   return(b1) # unclass((fit())$loadings)
   }
   })
