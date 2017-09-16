@@ -68,7 +68,16 @@ img(src = "example1.png") #, height = 280, width = 400
 #                          (textOutput("text4")),
                          plotOutput("plot1",height = 600, width = 850)),
                 tabPanel("Loadings",tableOutput("loadings")),
-                tabPanel("Scores",tableOutput("scores")),
+                
+#                tabPanel("Scores",tableOutput("scores")),   # origi code
+                # my edits 16-9-2017 below:
+                tabPanel("Scores", 	# tab name
+	                      br(),
+                        downloadButton('downloadDataX', 
+		                        'Download Segmentation file (Works only in browser)'), 
+	                      br(),br(),
+	              tableOutput("scores")),
+                
                 tabPanel("Factor vs Variables",plotOutput("plot20",height = 600, width = 850)),
                 tabPanel("Factor vs Variables 2",plotOutput("plot2",height = 600, width = 850)),
                 tabPanel("Factor vs Users",plotOutput("plot3",height = 600, width = 850)),
