@@ -278,6 +278,14 @@ output$scores <- renderTable({
       # unclass((fit())$scores)
       #                             }
 })  
+  
+# my edits 16-sept-2017 below
+  output$downloadDataX <- downloadHandler(
+    filename = function() { "segmentation.csv" },
+    content = function(file) {
+      write.csv(b0(), file, row.names = F)
+   				 }
+	)
 
 output$downloadData <- downloadHandler(
   filename = function() { "Big_five_Survey_data.csv" },
