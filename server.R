@@ -281,9 +281,9 @@ output$scores <- renderTable({
   
 # my edits 16-sept-2017 below
   output$downloadDataX <- downloadHandler(
-    filename = function() { "segmentation.csv" },
+    filename = function() { "Fac_scores.csv" },
     content = function(file) {
-      write.csv(b0(), file, row.names = F)
+      write.csv(data.frame(rownames(Dataset()), (fit())$scores), file, row.names = F)
    				 }
 	)
 
