@@ -1,7 +1,7 @@
-try(require("shiny")||install.packages("shiny"))
-try(require("nFactors")||install.packages("nFactors"))
-try(require("qgraph")||install.packages("qgraph"))
-try(require("corrplot")||install.packages("corrplot"))
+if (!require("shiny")) {install.packages("shiny")}
+if (!require("nFactors")) {install.packages("nFactors")}
+if (!require("qgraph")) {install.packages("qgraph")}
+if (!require("corrplot")) {install.packages("corrplot")}
     
 library("shiny")
 library("nFactors")
