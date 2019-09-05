@@ -20,6 +20,13 @@ shinyServer(function(input, output) {
     }
   })
 
+fname <- reactive({
+  if(length(strsplit(input$fname,',')[[1]])==0){return(NULL)}
+  else{
+    return(strsplit(input$fname,',')[[1]])
+  }
+})
+
 # output$table22 <- renderTable ({ 
 #   round(cor(Dataset()),2) 
 #                                       })
@@ -77,16 +84,26 @@ output$xaxis <- renderUI({
   
   if (is.null(input$file)) { return(NULL) }
   else {
-  n =(fselect())
-  list = character(0)
-  for (i in 1:n) { 
-    temp = paste("Factor",i)
-    list = c(list, temp)
+  if(is.null(fname())){
+    n =(fselect())
+    list = character(0)
+    for (i in 1:n) { 
+      temp = paste("Factor",i)
+      list = c(list, temp)
+    }
+    
+    selectInput("xaxis", "Choose Factor for plotting on X axis",
+                list, selected = "Factor 1")
+  }else{
+      temp = fname()
+       selectInput("xaxis", "Choose Factor for plotting on X axis",
+                temp, selected = temp[1])
+    
+  }
+    
+    
   }
   
-  selectInput("xaxis", "Choose Factor for plotting on X axis",
-                     list, selected = "Factor 1")
-  }
   
 })
 
@@ -94,33 +111,54 @@ output$yaxis <- renderUI({
   
   if (is.null(input$file)) { return(NULL) }
   else {
-    n =(fselect())
-    list = character(0)
-    for (i in 1:n) { 
-      temp = paste("Factor",i)
-      list = c(list, temp)
+    if(is.null(fname())){
+      n =(fselect())
+      list = character(0)
+      for (i in 1:n) { 
+        temp = paste("Factor",i)
+        list = c(list, temp)
+      }
+      list2 = setdiff(list,input$xaxis)
+      selectInput("yaxis", "Choose Factor for plotting on Y axis",
+                  list2, selected = "Factor 2")
+    }else{
+      temp = fname()
+      temp2 = setdiff(temp,input$xaxis)
+      selectInput("yaxis", "Choose Factor for plotting on Y axis",
+                  temp2, selected = temp2[1])
+      
     }
-    list2 = setdiff(list,input$xaxis)
-    selectInput("yaxis", "Choose Factor for plotting on Y axis",
-                list2, selected = "Factor 2")
-  }
+      }
   
 })
 
 f1 = reactive({
-  f = input$xaxis
-  s <- strsplit(f, "[^[:digit:]]")
-  solution <- as.numeric(unlist(s))
-  solution <- unique(solution[!is.na(solution)])
-  return(solution)
+  if(is.null(fname())){
+    f = input$xaxis
+    s <- strsplit(f, "[^[:digit:]]")
+    solution <- as.numeric(unlist(s))
+    solution <- unique(solution[!is.na(solution)])
+    return(solution)
+  }else{
+index <- match(input$xaxis,fname())
+return(index)
+}
+  
 })
 
 f2 = reactive({
-  f = input$yaxis
-  s <- strsplit(f, "[^[:digit:]]")
-  solution <- as.numeric(unlist(s))
-  solution <- unique(solution[!is.na(solution)])
-  return(solution)
+  if(is.null(fname())){
+    f = input$yaxis
+    s <- strsplit(f, "[^[:digit:]]")
+    solution <- as.numeric(unlist(s))
+    solution <- unique(solution[!is.na(solution)])
+    return(solution)
+  }else{
+    index<-match(input$yaxis,fname()) 
+    return(index)
+    
+   }
+  
   
 })
 
@@ -194,7 +232,7 @@ output$plot2 = renderPlot({
     
     par(col="black") #black lines in plots
     
-    plot(load,type="p",pch=19,col="red", xlim=c(-1, 1), ylim=c(-1, 1)) # set up plot
+    plot(load,type="p",pch=19,col="red", xlim=c(-1, 1), ylim=c(-1, 1),xlab=input$xaxis,ylab = input$yaxis) # set up plot
     
     abline(h=0);abline(v=0)#draw axes
     
@@ -230,7 +268,15 @@ output$loadings <- renderTable({
   if (is.null(input$file)) { return(NULL) } else{
   # rownames((fit())$loadings) = colnames(Dataset())  # edit 2
   b2 <- unclass((fit())$loadings); rownames(b2) <- NULL;  
-  b1 <- data.frame(colnames(Dataset()), b2);   # [2:ncol(Dataset())];rownames(b1) <- colnames(Dataset())  # edit 2  
+  b1 <- data.frame(colnames(Dataset()), b2);# [2:ncol(Dataset())];rownames(b1) <- colnames(Dataset())  # edit 2  
+  #-------#
+  if(is.null(fname())){return(b1)}
+  else{
+    names(b1)[c(-1)]<-fname()
+    return(b1)
+  }
+  
+  #-------#
   return(b1) # unclass((fit())$loadings)
   }
   })
@@ -274,7 +320,15 @@ output$scores <- renderTable({
   if (is.null(input$file)) { return(NULL) } else{
       # rownames((fit())$scores) = rownames(Dataset()) # edit 3 i made.
       # b0 <- (fit())$scores;   rownames(b0) <- rownames(Dataset()); 
-      b0 <- data.frame(rownames(Dataset()), (fit())$scores); return(b0) } # else ends                                   
+    
+      b0 <- data.frame(rownames(Dataset()), (fit())$scores) # else ends    
+      
+  if(is.null(fname())){return(b0)}
+  else{
+    names(b0)[c(-1)]<-fname()
+    return(b0)
+  }
+  }
       # unclass((fit())$scores)
       #                             }
 })  
